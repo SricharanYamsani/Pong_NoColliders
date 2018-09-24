@@ -4,20 +4,24 @@ using UnityEngine;
 
 public class MovementScript : MonoBehaviour {
 
+    //Camera size variables
     float horizontalExtent, verticalExtent;
 
+    //Paddles and associated Variables
     [SerializeField] GameObject RightPaddle;
     [SerializeField] GameObject LeftPaddle;
     float paddleSpped = 5f;
     float paddleScale;
-
+    //
+	
+    //Ball and associated variables	
     [SerializeField] GameObject Ball;
     float ballSpeed = 7f;
-
     float radius;
-
     Vector3 ballDir;
-    void Start () {
+    //
+	
+void Start () {
 
         verticalExtent = Camera.main.orthographicSize;
         horizontalExtent = verticalExtent * Camera.main.aspect;
@@ -51,7 +55,7 @@ public class MovementScript : MonoBehaviour {
         Vector3 pos;
         float dir = Input.GetAxisRaw("Vertical_L");
         LeftPaddle.transform.Translate(new Vector3(0, dir) * Time.deltaTime * paddleSpped);
-
+	//Clamping paddle position
         pos = LeftPaddle.transform.position;
         pos.y = Mathf.Clamp(pos.y, -verticalExtent + paddleScale, verticalExtent - paddleScale);
 
@@ -60,7 +64,7 @@ public class MovementScript : MonoBehaviour {
         dir = Input.GetAxisRaw("Vertical_R");
         RightPaddle.transform.Translate(new Vector3(0, dir) * Time.deltaTime * paddleSpped);
 
-
+	//Clamping paddle position
         pos = RightPaddle.transform.position;
         pos.y = Mathf.Clamp(pos.y, -verticalExtent + paddleScale, verticalExtent - paddleScale);
 
@@ -70,20 +74,20 @@ public class MovementScript : MonoBehaviour {
 
     void CheckBallCollisionWithWalls()
     {
-        if(Ball.transform.position.y + radius >= verticalExtent || Ball.transform.position.y - radius <= -verticalExtent)
+        if(Ball.transform.position.y + radius >= verticalExtent || Ball.transform.position.y - radius <= -verticalExtent)//Up Wall || Down Wall
         {
-            ballDir.y *= -1;
+            ballDir.y *= -1;//Bounce off Wall
         }
     }
 
     void CheckBallCollisionWithRightPaddle()
     {
         
-        if (Ball.transform.position.x + radius >= RightPaddle.transform.position.x - RightPaddle.transform.localScale.x/2)
+        if (Ball.transform.position.x + radius >= RightPaddle.transform.position.x - RightPaddle.transform.localScale.x/2)//Ball.x is to the right of left edge of Ridght Paddle
         {
-            if(Ball.transform.position.y < RightPaddle.transform.position.y + paddleScale && Ball.transform.position.y > RightPaddle.transform.position.y - paddleScale)
+            if(Ball.transform.position.y < RightPaddle.transform.position.y + paddleScale && Ball.transform.position.y > RightPaddle.transform.position.y - paddleScale)//Ball.y is in Between Top and Bottom edges of Paddle
             {
-                ballDir.x *= -1;
+                ballDir.x *= -1;//Bounce off Paddle
             }
         }
     }
@@ -91,11 +95,11 @@ public class MovementScript : MonoBehaviour {
     void CheckBallCollisionWithLeftPaddle()
     {
 
-        if (Ball.transform.position.x - radius <= LeftPaddle.transform.position.x + LeftPaddle.transform.localScale.x / 2)
+        if (Ball.transform.position.x - radius <= LeftPaddle.transform.position.x + LeftPaddle.transform.localScale.x / 2)//Ball.x is to the left of right edge of Left Paddle
         {
-            if (Ball.transform.position.y < LeftPaddle.transform.position.y + paddleScale && Ball.transform.position.y > LeftPaddle.transform.position.y - paddleScale)
+            if (Ball.transform.position.y < LeftPaddle.transform.position.y + paddleScale && Ball.transform.position.y > LeftPaddle.transform.position.y - paddleScale)//Ball.y is in Between Top and Bottom edges of Paddle
             {
-                ballDir.x *= -1;
+                ballDir.x *= -1;//Bounce off Paddle
             }
         }
     }
